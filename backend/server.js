@@ -5,7 +5,15 @@ const {Server}=require("socket.io")
 const generateResponse = require("./src/service/ai.service")
 
 const httpServer=createServer(app)
-const io = new Server(httpServer)
+const io = new Server(httpServer,{
+    cors:{
+        origin:"http://localhost:5173"
+    }
+})
+
+const chatHistory=[
+   
+]
 
 io.on("connection",(socket)=>{
     console.log("connect");
@@ -18,10 +26,27 @@ io.on("connection",(socket)=>{
 
     //custom event
     socket.on("ai-message",async (data)=>{
-        console.log("message recieved",data);
+        
 
-        const aiResponse=await generateResponse(data)
+        chatHistory.push({
+            role:"user",
+            parts:[{text:data}]
+        })
+
+    
+        const aiResponse=await generateResponse(chatHistory)
+
+
+        
+        chatHistory.push({
+            role:"model",
+            parts:[{text:aiResponse}]
+        })
+
+        console.log(aiResponse);
+        socket.emit("ai-message-response",{aiResponse})
     })
+
 
 
     
