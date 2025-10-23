@@ -69,7 +69,7 @@ const ChatApp = () => {
         <input
           type="text"
           className="flex-1 px-4 py-2 border rounded focus:outline-none"
-          placeholder="Type your message..."
+          placeholder="Type your message.."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
